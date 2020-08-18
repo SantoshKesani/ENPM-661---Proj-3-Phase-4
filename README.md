@@ -4,7 +4,7 @@
 The project involves the path planning of turtlebot with differential drive and the simulation of the same is ROS-Gazebo environment.
 
 ### How to run
-Clone the repository and run the Bot_control.py file in the src folder to vizualize the turtlebot-2
+Clone the repository and run the bot_control.py file in the src folder to vizualize the turtlebot-2
 
 ### Dependencies
-Python // ROS // Numpy // OpenCV //
+Python // ROS // Numpy // OpenCV // math // sys // argparse // datetime
