@@ -1,0 +1,40 @@
+<launch>
+  <arg name="x_pos" default="4.5"/>
+  <arg name="y_pos" default="4.5"/>
+  <arg name="z_pos" default="0.0"/>
+  <arg name="roll" default="0"/>
+  <arg name="yaw" default="270"/>
+  <arg name="pitch" default="0"/>
+
+  <arg name="base"      value="$(optenv TURTLEBOT_BASE kobuki)"/> <!-- create, roomba -->
+  <arg name="battery"   value="$(optenv TURTLEBOT_BATTERY /proc/acpi/battery/BAT0)"/>  <!-- /proc/acpi/battery/BAT0 --> 
+  <arg name="gui" value="true"/>
+  <arg name="stacks"    value="$(optenv TURTLEBOT_STACKS hexagons)"/>  <!-- circles, hexagons --> 
+  <arg name="3d_sensor" value="$(optenv TURTLEBOT_3D_SENSOR kinect)"/>  <!-- kinect, asus_xtion_pro --> 
+  
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name"  value="$(find phase_4)/world/map.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <include file="$(find phase_4)/launch/kobuki.launch.xml">
+    <arg name="base" value="$(arg base)"/>
+    <arg name="x" value="$(arg x_pos)"/>
+    <arg name="y" value="$(arg y_pos)"/>
+    <arg name="yaw" value="$(eval 3.14 * arg('yaw') / 180)"/>
+    <arg name="stacks" value="$(arg stacks)"/>
+    <arg name="3d_sensor" value="$(arg 3d_sensor)"/>
+  </include>
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="30.0" />
+  </node>
+
+  <node pkg="phase_4" type="bot_control.py" name="bot_control" output="screen"
+	args = "$(arg x_pos) $(arg y_pos) $(arg theta) $(arg x_pos_f) $(arg y_pos_f) $(arg rpm1) $(arg rpm2)" />
+
+</launch>
